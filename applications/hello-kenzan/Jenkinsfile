@@ -10,14 +10,14 @@ node {
     appName = "hello-kenzan"
     registryHost = "127.0.0.1:30912/"
     imageName = "${registryHost}${appName}:${tag}"
-    env.BUILDIMG=imageName
+    env.BUILDIMG="${imageName}"
 
     stage "Build"
 
         sh "docker build -t ${imageName} part1/hello-kenzan"
 
     stage "Push"
-
+        echo "${imageName}"
         sh "docker push ${imageName}"
 
     stage "Deploy"
