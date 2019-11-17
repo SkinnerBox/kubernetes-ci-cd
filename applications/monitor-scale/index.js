@@ -30,11 +30,11 @@ watcher.on("change", function(val) {
 app.post('/scale', function (req, res) {
   var scale = req.body.count;
   console.log('Count requested is: %s', scale);
-  var url = "http://127.0.0.1:2345/apis/extensions/v1beta1/namespaces/default/deployments/puzzle/scale";
+  var url = "http://127.0.0.1:2345/apis/apps/v1/namespaces/default/deployments/puzzle/scale";
   var putBody = {
     kind:"Scale",
-    apiVersion:"extensions/v1beta1",
-    metadata: { 
+    apiVersion:"apps/v1",
+    metadata: {
       name:"puzzle",
       namespace:"default"
     },
@@ -63,7 +63,7 @@ app.post('/loadtest/concurrent', function (req, res) {
   var myUrls = [];
   for (var i = 0; i < req.body.count; i++) {
     myUrls.push(url);
-  } 
+  }
   async.map(myUrls, function(url, callback) {
     request(url, function(error, response, html){
       if (response && response.hasOwnProperty("statusCode")) {
@@ -79,13 +79,13 @@ app.post('/loadtest/concurrent', function (req, res) {
 });
 
 app.post('/loadtest/consecutive', function (req, res) {
-  
+
   var count = req.body.count;
   var url = "http://puzzle:3000/puzzle/v1/crossword";
   var callArray = [];
 
   for (var i = 0; i < req.body.count; i++) {
-    
+
     callArray.push(function (cb) {
       setTimeout(function () {
         request(url, function(error, response, html) {
@@ -136,7 +136,7 @@ app.delete('/pods', function (req, res) {
 });
 
 io.on('connection', function(socket){
-  
+
   console.log("Websocket connection established.");
   socket.on('disconnect', function() {
     console.log("Websocket disconnect.");
@@ -150,4 +150,3 @@ app.get('/', function(req,res){
 http.listen(3001, function () {
   console.log('Listening on port 3001!');
 });
-
